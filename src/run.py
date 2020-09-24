@@ -12,6 +12,9 @@ orb = cv2.ORB_create(nfeatures=2000, scoreType=cv2.ORB_FAST_SCORE)
 bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
 
 cap = cv2.VideoCapture('../kf_gameplay.flv')
+
+out = cv2.VideoWriter('output.avi', -1, 20.0, (640,480))
+
 kps_last = None
 des_last = None
 img_last = None
@@ -79,16 +82,15 @@ while(cap.isOpened()):
 
         # matched_img = cv2.drawMatches(gray,kps,img_last,kps_last,matches[500:],None,flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
         matched_img = cv2.drawKeypoints(frame, kps_moving, None, color=(255,0,0), flags=0)
-
-    # print("# of keypoints: {}".format(len(kps)))
+        
     # print (kps[0].angle)
-    #float angle; // 特征点的方向，值为[零, 三百六十)，负值表示不使用
 
     output_img = cv2.drawKeypoints(frame, kps, None, color=(0,255,0), flags=0)
 
     cv2.imshow('kf_gameplay',output_img)
     if init:
         cv2.imshow('kf_gameplay_matched',matched_img)
+        out.write(matched_img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     # Flags
@@ -96,7 +98,7 @@ while(cap.isOpened()):
     des_last = des
     img_last = gray
     init = True
-    time.sleep(0.001)
 
+out.release()
 cap.release()
 cv2.destroyAllWindows()
