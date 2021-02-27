@@ -10,9 +10,8 @@ import numpy as np
 import cv2
 import time
 
-COLOR_ROWS = 80
-COLOR_COLS = 250
-color_code = "HSV" #"RGB"
+COLOR_ROWS = 160
+COLOR_COLS = 500
 
 # capture = cv2.VideoCapture(0)
 capture = cv2.VideoCapture('../overcooked_play.mp4')
@@ -36,18 +35,19 @@ def on_mouse_click(event, x, y, flags, userParams):
         hsv = snapshot_hsv[y, x, [0,1,2]]
 
         # From stackoverflow/com/questions/1855884/determine-font-color-based-on-background-color
+        # Get text Color 
         luminance = 1 - (0.299*rgb[0] + 0.587*rgb[1] + 0.114*rgb[2]) / 255
         if luminance < 0.5:
             textColor = [0,0,0]
         else:
             textColor = [255,255,255]
-
-        if color_code == "RGB":
-            cv2.putText(colorArray, str(rgb), (20, COLOR_ROWS - 20),
-                fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.8, color=textColor)
-        elif color_code == "HSV":
-            cv2.putText(colorArray, str(hsv), (20, COLOR_ROWS - 20),
-                fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.8, color=textColor)
+        
+        cv2.putText(colorArray, "(x,y): " + str((x,y)), (20, COLOR_ROWS - 100),
+            fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.8, color=textColor)
+        cv2.putText(colorArray, "RGB:" + str(rgb), (20, COLOR_ROWS - 60),
+            fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.8, color=textColor)
+        cv2.putText(colorArray, "HSV:" + str(hsv), (20, COLOR_ROWS - 20),
+            fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.8, color=textColor)
 
         cv2.imshow('Color', colorArray)
 

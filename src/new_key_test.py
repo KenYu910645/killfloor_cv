@@ -3,7 +3,6 @@ import time
 
 SendInput = ctypes.windll.user32.SendInput
 
-
 class player1():
     def __init__(self):
         self.up_key = 0x11 # W
@@ -12,13 +11,13 @@ class player1():
         self.left_key = 0x1E # D 
         self.chop_key = 0x10 # Q
         self.pick_key = 0x12 # E
-        self.dash_key = 0x13 # R
+        self.dash_key = 0x13 # R 
 
 class player2():
     def __init__(self):
         self.up_key = 0x17 # I 
         self.down_key = 0x25 # K
-        self.right_key = 0x26 # LWI
+        self.right_key = 0x26 # L
         self.left_key = 0x24 # J
         self.chop_key = 0x16 # U
         self.pick_key = 0x18 # O
@@ -63,7 +62,7 @@ class Input(ctypes.Structure):
 def PressKey(hexKeyCode):
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
-    ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008,0, ctypes.pointer(extra) )
+    ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008,10000 , ctypes.pointer(extra) )
     x = Input( ctypes.c_ulong(1), ii_ )
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
@@ -77,46 +76,46 @@ def ReleaseKey(hexKeyCode):
 def impluse_key(hexcode, width = 0.0):
     PressKey(hexcode)
     if width != 0.0:
+        t = time.time()
         time.sleep(width)
+        ReleaseKey(hexcode)
+        return time.time() - t
     ReleaseKey(hexcode)
 
-def test():
-    impluse_key(PLAY1.chop_key)
-    impluse_key(PLAY2.chop_key)
-    time.sleep(0.4)
-
-    # impluse_key(PLAY1.pick_key)
-    # impluse_key(PLAY2.pick_key)
-    # time.sleep(0.4)
-
-    # impluse_key(PLAY1.dash_key, width = 0.05)
-    # impluse_key(PLAY2.dash_key, width = 0.05)
-    # time.sleep(0.4)
-
-    # PressKey(PLAY1.up_key)
-    # PressKey(PLAY2.up_key)
-    # time.sleep(0.5)
-    # ReleaseKey(PLAY1.up_key)
-    # ReleaseKey(PLAY2.up_key)
-
-    # PressKey(PLAY1.down_key)
-    # PressKey(PLAY2.down_key)
-    # time.sleep(0.5)
-    # ReleaseKey(PLAY1.down_key)
-    # ReleaseKey(PLAY2.down_key)
-
-    # PressKey(PLAY1.right_key)
-    # PressKey(PLAY2.right_key)
-    # time.sleep(0.5)
-    # ReleaseKey(PLAY1.right_key)
-    # ReleaseKey(PLAY2.right_key)    
-
-    # PressKey(PLAY1.left_key)
-    # PressKey(PLAY2.left_key)
-    # time.sleep(0.5)
-    # ReleaseKey(PLAY1.left_key)
-    # ReleaseKey(PLAY2.left_key)
-
 # directx scan codes http://www.gamespp.com/directx/directInputKeyboardScanCodes.html
-while (True):
-    test()
+summon = 0.0
+
+
+if __name__ == '__main__':
+    while(True):
+        ''' summon time sleep test
+        dt = impluse_key(PLAY1.up_key, width = 0.17) # 0.15 for 180 degree
+        summon += dt
+        time.sleep(0.5) # take a rest
+        dt = impluse_key(PLAY1.down_key, width = 0.17) # 0.15 for 180 degree
+        summon -= dt
+        print ("summon: " + str(summon) )
+        time.sleep(0.5)
+        '''
+        '''
+        time.sleep(2)
+        offset = 0.20 # 0.2 sec to go a single block
+        for i in range(5):
+            impluse_key(PLAY1.down_key, width = offset) # 0.15 for 180 degree
+            time.sleep(0.5)
+        for i in range(10):
+            impluse_key(PLAY1.right_key, width = offset) # 0.15 for 180 degree
+            time.sleep(0.5)
+        for i in range(5):
+            impluse_key(PLAY1.up_key, width = offset) # 0.15 for 180 degree
+            time.sleep(0.5)
+        for i in range(10):
+            impluse_key(PLAY1.left_key, width = offset) # 0.15 for 180 degree
+            time.sleep(0.5)
+        '''
+        #offset = 0.20
+        #impluse_key(PLAY1.up_key, width = offset) # 0.15 for 180 degree
+        #impluse_key(PLAY1.right_key, width = offset) # 0.15 for 180 degree
+        #impluse_key(PLAY1.down_key, width = offset) # 0.15 for 180 degree
+        #impluse_key(PLAY1.left_key, width = offset) # 0.15 for 180 degree
+        impluse_key(PLAY1.left_key, width = 0.1) #
